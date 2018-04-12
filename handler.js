@@ -6,64 +6,98 @@ const request = require('axios');
 const AWS = require('aws-sdk');
 const dynamo = new AWS.DynamoDB.DocumentClient();
 const { differenceWith, isEqual } = require('lodash');
+var config = fs.readFileSync('./app_config.json', 'utf8');
+config = JSON.parse(config);
+
+
+var sns = new AWS.SNS({ region: config.AWS_REGION});
+
 
 module.exports.gettickets = (event, context, callback) => {
-	let newDates, JSONtoPass;
+	let newDates, JSONtoPass, yesterdaysDates, butts;
 	
 	request('http://global.smtowntravel.com/')
 	.then(({data}) => {
-		//callback(null, {data});
 		
 		var goop = data.toString();
 		var number = goop.indexOf("M Cultour Package")
 		var dateOfTickets = goop.substring(number, number+30)
 		
-		//JSONtoPass = {"dates": dateOfTickets}
 		JSONtoPass = dateOfTickets
-		
-		//return console.log(goop.indexOf("M Cultour Package"));
-		//return console.log(dateOfTickets);
+	
 		
 		// Retrieve yesterday's jobs
 		return dynamo.scan({
 			TableName: 'tickets'
 		}).promise();
 	})
+	
     .then(response => {
-		// Figure out which jobs are new
-		let yesterdaysDates = response.Items[0] ? response.Items[0].dates : [];
 
-		newDates = differenceWith(JSONtoPass, yesterdaysDates, isEqual);
+		// Figure out which jobs are new
+		//let yesterdaysDates = response.Items[0] ? response.Items[0].dates : [];
+		//yesterdaysDates = response.Items[0] ? response.Items[0].dates : [];
+		yesterdaysDates = response.Items[0].dates;
+		//newDates = differenceWith(JSONtoPass, yesterdaysDates, isEqual);
+		butts = JSONtoPass.localeCompare(yesterdaysDates);
+
+		//if the date isnt the same as yesterday, put new date in database, and send me a text
+		if (butts != 0) {
+			newDates = JSONtoPass;
+			
+			
+			var snsMessage = 'SIGN UP NOW!!2'; //Send SNS notification containing email from form.
+			sns.publish({ TopicArn: config.NEW_SIGNUP_TOPIC, Message: snsMessage }, function(err, data) {
+				if (err) {
+					console.log('Error publishing SNS message: ' + err);
+				} else {
+					console.log('SNS message sent.');
+				}
+			});
+			
+			
+			// Save the list of today's jobs
+			return dynamo.put({
+				TableName: 'tickets',
+					Item: {
+						listingId: new Date().toString(),
+						dates: JSONtoPass
+					}
+			}).promise();
+			
+			
+			
+			
+		}
+		
+		var snsMessage = 'all good'; //Send SNS notification containing email from form.
+		sns.publish({ TopicArn: config.NEW_SIGNUP_TOPIC, Message: snsMessage }, function(err, data) {
+			if (err) {
+				console.log('Error publishing SNS message: ' + err);
+			} else {
+				console.log('SNS message sent.');
+			}
+		});
 
 		// Get the ID of yesterday's jobs which can now be deleted
-		const datesToDelete = response.Items[0] ? response.Items[0].listingId : null;
+/* 		const datesToDelete = response.Items[0] ? response.Items[0].listingId : null;
 
 		// Delete old jobs
 		if (datesToDelete) {
-			return dynamo.delete({
+ 			return dynamo.delete({
 				TableName: 'tickets',
 				Key: {
 					listingId: datesToDelete
 				}
 			}).promise();
-		} else return;
+		} else return;  */
     })
     .then(() => {
-		// Save the list of today's jobs
-		return dynamo.put({
-			TableName: 'tickets',
-			Item: {
-				listingId: new Date().toString(),
-				dates: JSONtoPass
-			}
-		}).promise();
-    })
-    .then(() => {
-		callback(null, { dates: newDates }); 
-    })
+
+		callback(null, { newDates }); 
+		
+	})	
     .catch(callback);
-	
-	
 	
  /*  const response = {
     statusCode: 200,
