@@ -4,10 +4,10 @@ const cheerio = require('cheerio');
 function extractTicketsFromHTML (html) {
   const $ = cheerio.load(html);
   //const vacancyRows = $('.view-Vacancies tbody tr');
-  const vacancyRows = $('.content_sh tbody tr');
+  //const vacancyRows = $('<div class="content_sh">...</div>');
 
   const vacancies = [];
-  vacancyRows.each((i, el) => {
+  /* vacancyRows.each((i, el) => {
 
     // Extract information from each row of the jobs table
    // let closing = $(el).children('.views-field-field-vacancy-deadline').first().text().trim();
@@ -17,12 +17,13 @@ function extractTicketsFromHTML (html) {
     //closing = moment(closing.slice(0, closing.indexOf('-') - 1), 'DD/MM/YYYY').toISOString();
 
     //vacancies.push({closing, job, location});
-    vacancies.push({job});
+    vacancies.push({$});
+    //vacancies.push({job});
   });
+   */
   
-  
-return vacancyRows;
-  //return vacancies;
+//return vacancyRows.text();
+  return $;
 }
 
 module.exports = {
