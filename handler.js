@@ -71,14 +71,7 @@ module.exports.gettickets = (event, context, callback) => {
 			
 		}
 		
-		var snsMessage = 'all good'; //Send SNS notification containing email from form.
-		sns.publish({ TopicArn: config.NEW_SIGNUP_TOPIC, Message: snsMessage }, function(err, data) {
-			if (err) {
-				console.log('Error publishing SNS message: ' + err);
-			} else {
-				console.log('SNS message sent.');
-			}
-		});
+
 
 		// Get the ID of yesterday's jobs which can now be deleted
 /* 		const datesToDelete = response.Items[0] ? response.Items[0].listingId : null;
@@ -94,8 +87,18 @@ module.exports.gettickets = (event, context, callback) => {
 		} else return;  */
     })
     .then(() => {
+		
+		var snsMessage = 'A'; //Send SNS notification containing email from form.
+		sns.publish({ TopicArn: config.NEW_SIGNUP_TOPIC, Message: snsMessage }, function(err, data) {
+			if (err) {
+				console.log('Error publishing SNS message: ' + err);
+			} else {
+				console.log('SNS message sent.');
+			}
+		});
 
-		callback(null, { newDates }); 
+		//callback(null, { newDates }); 
+		callback(null, { JSONtoPass }); 
 		
 	})	
     .catch(callback);

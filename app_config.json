@@ -1,4 +1,4 @@
 { 
-  "AWS_REGION": "us-west-2",
-  "NEW_SIGNUP_TOPIC": "arn:aws:sns:us-west-2:066143087286:MCountdownTickets"
+  "AWS_REGION": "us-east-1",
+  "NEW_SIGNUP_TOPIC": "arn:aws:sns:us-east-1:066143087286:MCountdownTickets"
 }
