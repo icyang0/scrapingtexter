@@ -106,7 +106,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/scrapingtexter/dev/1523566265231-2018-04-12T20:51:05.231Z/scrapingtexter.zip"
+                "S3Key": "serverless/scrapingtexter/dev/1523579085412-2018-04-13T00:24:45.412Z/scrapingtexter.zip"
               },
               "FunctionName": "scrapingtexter-dev-gettickets",
               "Handler": "handler.gettickets",
@@ -125,14 +125,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "GetticketsLambdaVersionDCufQCgPulBY8QktU8qtEJMxppc5E7rS975z6Pczc": {
+          "GetticketsLambdaVersionz4FBvAJgrcHf6RD0OzehvUJ2BQK1Y2g5W7CWqcUPUM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetticketsLambdaFunction"
               },
-              "CodeSha256": "IaawJ/WRuozH/vvhzEfluL5OFlJzKwQSSMCsR5/+D7s="
+              "CodeSha256": "kA9XYz2KFCczZ5zawoD+OY6QI+nuar4ZIQbF9BEZTpo="
             }
           },
           "tickets": {
@@ -197,7 +197,7 @@
           "GetticketsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetticketsLambdaVersionDCufQCgPulBY8QktU8qtEJMxppc5E7rS975z6Pczc"
+              "Ref": "GetticketsLambdaVersionz4FBvAJgrcHf6RD0OzehvUJ2BQK1Y2g5W7CWqcUPUM"
             }
           }
         }
@@ -289,7 +289,7 @@
     "artifact": "C:\\Users\\irene\\scrapingtexter\\scrapingtexter\\.serverless\\scrapingtexter.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/scrapingtexter/dev/1523566265231-2018-04-12T20:51:05.231Z",
+    "artifactDirectoryName": "serverless/scrapingtexter/dev/1523579085412-2018-04-13T00:24:45.412Z",
     "artifact": "scrapingtexter.zip"
   }
 }

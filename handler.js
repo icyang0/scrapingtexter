@@ -1,11 +1,12 @@
 'use strict';
 
 var fs = require('fs');
-const request = require('axios');
+
 //const {extractTicketsFromHTML} = require('./helpers');
 const AWS = require('aws-sdk');
 const dynamo = new AWS.DynamoDB.DocumentClient();
 const { differenceWith, isEqual } = require('lodash');
+const request = require('axios');
 var config = fs.readFileSync('./app_config.json', 'utf8');
 config = JSON.parse(config);
 
